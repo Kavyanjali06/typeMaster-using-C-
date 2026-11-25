@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeMaster — Precision Typing</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="TypeMaster home"><span class="brand-mark">T</span><span>TypeMaster</span></a>
+      <div class="top-actions">
+        <span id="welcome" class="profile-name"></span>
+        <button id="logoutBtn" class="icon-button hidden" type="button" title="Log out" aria-label="Log out">↗</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="authView" class="auth-layout">
+        <div class="hero-copy">
+          <div class="eyebrow"><span></span> PERSONAL TYPING WORKSPACE</div>
+          <h1>Turn practice into <span class="gradient-text">precision.</span></h1>
+          <p>Measure every keystroke, build a consistent rhythm, and track meaningful progress over time.</p>
+          <div class="feature-pills"><span><b>01</b> Adaptive sessions</span><span><b>02</b> Live analytics</span><span><b>03</b> Personal rankings</span></div>
+        </div>
+        <div class="panel auth-panel">
+          <div class="auth-heading">
+            <div class="auth-mark">T</div>
+            <div><strong>Welcome</strong><span>Sign in to continue</span></div>
+          </div>
+          <div class="tabs">
+            <button class="tab active" data-mode="login" type="button">Log in</button>
+            <button class="tab" data-mode="register" type="button">Create account</button>
+          </div>
+          <form id="authForm">
+            <label>Username<input id="username" minlength="3" maxlength="20" autocomplete="username" required placeholder="Enter your username"></label>
+            <label>Password<input id="password" type="password" minlength="4" maxlength="64" autocomplete="current-password" required placeholder="Enter your password"></label>
+            <button id="authSubmit" class="button button-primary full-width" type="submit">Log in <span>→</span></button>
+          </form>
+          <p id="authMessage" class="message" aria-live="polite"></p>
+          <p class="tiny-note">Local demonstration: use a test password, not a password you use elsewhere.</p>
+        </div>
+      </section>
+
+      <section id="dashboard" class="hidden">
+        <div class="welcome-row">
+          <div><div class="eyebrow"><span></span> TYPING PRACTICE</div><h1>Good to see you, <span id="welcomeName"></span></h1><p class="muted">Your next personal best is one focused session away.</p></div>
+          <div class="session-status"><span class="online-dot"></span><div><small>STATUS</small><strong>Ready to practice</strong></div></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon speed-icon">↗</div><div><span class="stat-label">PERSONAL BEST</span><strong><span id="bestWpm">—</span><small> WPM</small></strong></div><span class="stat-trend">TOP SPEED</span></article>
+          <article class="stat-card"><div class="stat-icon test-icon">✓</div><div><span class="stat-label">SESSIONS</span><strong id="testCount">0</strong></div><span class="stat-trend">COMPLETED</span></article>
+          <article class="stat-card"><div class="stat-icon accuracy-icon">◎</div><div><span class="stat-label">BEST ACCURACY</span><strong><span id="bestAccuracy">—</span><small>%</small></strong></div><span class="stat-trend">PRECISION</span></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel test-panel">
+            <div class="section-heading"><div><div class="eyebrow">NEW SESSION</div><h2>Typing test</h2></div><span class="live-tag"><i></i> LIVE TEST</span></div>
+            <div class="controls-row">
+              <label>Difficulty<select id="difficulty"><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></label>
+              <label>Time limit<select id="duration"><option value="15">15 seconds</option><option value="30" selected>30 seconds</option><option value="60">60 seconds</option><option value="120">120 seconds</option><option value="custom">Custom</option></select></label>
+              <label id="customWrap" class="hidden">Custom seconds<input id="customDuration" type="number" min="5" max="600" value="45"></label>
+            </div>
+            <div class="timer-row">
+              <div class="timer-metric"><span class="metric-caption">TIME REMAINING</span><strong id="timer">00:30</strong></div>
+              <div class="live-metrics">
+                <div><span class="metric-caption">SPEED</span><strong><span id="liveWpm">0</span><small> WPM</small></strong></div>
+                <div><span class="metric-caption">ACCURACY</span><strong><span id="liveAccuracy">100</span><small>%</small></strong></div>
+                <div><span class="metric-caption">CONSISTENCY</span><strong><span id="consistency">100</span><small>%</small></strong></div>
+              </div>
+            </div>
+            <div id="passage" class="passage">Choose your settings and press Start test to load a passage.</div>
+            <textarea id="typingInput" disabled spellcheck="false" placeholder="Your typing starts here. The timer begins with your first keystroke..."></textarea>
+            <div class="test-actions"><button id="startBtn" class="button button-primary">Start test <span>→</span></button><button id="resetBtn" class="button button-ghost" disabled>Reset</button><span id="testStatus" class="muted"><i class="status-dot"></i> Ready when you are.</span></div>
+            <div id="resultBanner" class="result-banner hidden"></div>
+          </section>
+
+          <aside class="side-column">
+            <section class="panel mini-panel chart-panel"><div class="section-heading"><div><div class="eyebrow">PERFORMANCE</div><h2>WPM trend</h2></div><span class="period-label">RECENT</span></div><canvas id="wpmChart" width="320" height="100" aria-label="Recent WPM trend"></canvas></section>
+            <section class="panel mini-panel"><div class="section-heading"><div><div class="eyebrow">YOUR PROGRESS</div><h2>Recent tests</h2></div></div><div id="historyList" class="history-list"><p class="muted">Complete a test to see your history.</p></div></section>
+            <section class="panel mini-panel"><div class="section-heading"><div><div class="eyebrow">TOP PERFORMERS</div><h2>Leaderboard</h2></div><span class="trophy">♛</span></div><div id="leaderboard" class="leaderboard-list"><p class="muted">Loading scores...</p></div></section>
+          </aside>
+        </div>
+        <footer>TypeMaster <span>·</span> Practice consistently. Improve continuously.</footer>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
